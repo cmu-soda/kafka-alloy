@@ -81,6 +81,7 @@ run visualizeBrokerRecover {
   InitBeforeRecover[3] and some Kafka.zookeeper.topics.partitions.leader.events
   executeBrokerRecover and after(doNothing)
 } for 4
+
 /**************************************************************************/
 
 
@@ -95,8 +96,8 @@ run visualizeBrokerRecover {
  * RESULT:
  * Executing "Check InvariantsStrictAlwaysSatisfiesWithSimpleKafka for 4"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=4 SkolemDepth=1 Symmetry=20 Mode=batch
- * 1..2 steps. 71958 vars. 1574 primary vars. 203465 clauses. 2197ms.
- * Counterexample found. Assertion is invalid. 352ms.
+ * 1..2 steps. 71958 vars. 1574 primary vars. 203465 clauses. 604ms.
+ * Counterexample found. Assertion is invalid. 146ms.
  */
 assert InvariantsStrictAlwaysSatisfiesWithSimpleKafka {
   -- Counterexample is expected for this assertion
@@ -112,8 +113,8 @@ check InvariantsStrictAlwaysSatisfiesWithSimpleKafka for 4
  * RESULT:
  * Executing "Check InvariantsStrictAlwaysSatisfiesWithFaultTolerantKafka for 4"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=4 SkolemDepth=1 Symmetry=20 Mode=batch
- * 1..3 steps. 136717 vars. 2940 primary vars. 407953 clauses. 9819ms.
- * Counterexample found. Assertion is invalid. 2346ms.
+ * 1..3 steps. 208675 vars. 4514 primary vars. 611418 clauses. 7919ms.
+ * Counterexample found. Assertion is invalid. 1509ms.
  */
 assert InvariantsStrictAlwaysSatisfiesWithFaultTolerantKafka {
   -- Counterexample is expected for this assertion
@@ -135,8 +136,8 @@ check InvariantsStrictAlwaysSatisfiesWithFaultTolerantKafka for 4
  * RESULT:
  * Executing "Check SimpleKafkaPreservesInvariantsAfterCrash for 3"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=3 SkolemDepth=1 Symmetry=20 Mode=batch
- * 1..3 steps. 68064 vars. 1626 primary vars. 191351 clauses. 599ms.
- * Counterexample found. Assertion is invalid. 97ms.
+ * 1..3 steps. 276739 vars. 6140 primary vars. 802769 clauses. 542ms.
+ * Counterexample found. Assertion is invalid. 93ms.
  */
 assert SimpleKafkaPreservesInvariantsAfterCrash {
   kafkaSimpleBehavior[3] implies always(InvariantsAfterCrash[Kafka])
@@ -148,7 +149,7 @@ check SimpleKafkaPreservesInvariantsAfterCrash for 3
  * kafkaFaultTolerantBehavior[3] ensures that a broker recovers after it crashes
  * Therefore, assertion holds because at least 2 replicas are always maintained
  *
- * RESULT:
+ * RESULT: ------
  * Executing "Check FaultTolerantKafkaWithThreeReplicasPreservesInvariantsAfterCrash for 3"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=3 SkolemDepth=1 Symmetry=20 Mode=batch
  * 1..10 steps. 553375 vars. 12735 primary vars. 1683485 clauses. 51487ms.
@@ -158,11 +159,16 @@ check SimpleKafkaPreservesInvariantsAfterCrash for 3
  * Solver=sat4j Steps=1..9 Bitwidth=4 MaxSeq=4 SkolemDepth=1 Symmetry=20 Mode=batch
  * 1..9 steps. 917281 vars. 19242 primary vars. 2825093 clauses. 3327452ms.
  * No counterexample found. Assertion may be valid. 186673ms.
+
+ * Executing "Check FaultTolerantKafkaWithThreeReplicasPreservesInvariantsAfterCrash for 3"
+ * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=3 SkolemDepth=1 Symmetry=20 Mode=batch
+ * 1..10 steps. 553375 vars. 12735 primary vars. 1683485 clauses. 57519ms.
+ * No counterexample found. Assertion may be valid. 18325ms.
  */
 assert FaultTolerantKafkaWithThreeReplicasPreservesInvariantsAfterCrash {
   kafkaFaultTolerantBehavior[3] implies always(InvariantsAfterCrash[Kafka])
 }
-check FaultTolerantKafkaWithThreeReplicasPreservesInvariantsAfterCrash for 4 but 9 steps
+check FaultTolerantKafkaWithThreeReplicasPreservesInvariantsAfterCrash for 3
 
 
 /**
@@ -173,8 +179,8 @@ check FaultTolerantKafkaWithThreeReplicasPreservesInvariantsAfterCrash for 4 but
  * RESULT:
  * Executing "Check FaultTolerantKafkaWithTwoReplicasPreservesInvariantsAfterCrash for 4"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=4 SkolemDepth=1 Symmetry=20 Mode=batch
- * 1..3 steps. 136387 vars. 2940 primary vars. 407023 clauses. 24309ms.
- * Counterexample found. Assertion is invalid. 1702ms.
+ * 1..3 steps. 413126 vars. 9080 primary vars. 1209792 clauses. 24759ms.
+ * Counterexample found. Assertion is invalid. 854ms.
  */
 assert FaultTolerantKafkaWithTwoReplicasPreservesInvariantsAfterCrash {
   kafkaFaultTolerantBehavior[2] implies always(InvariantsAfterCrash[Kafka])
@@ -190,8 +196,8 @@ check FaultTolerantKafkaWithTwoReplicasPreservesInvariantsAfterCrash for 4
  * RESULT:
  * Executing "Check BrokerRecoverPreservesStrictInvariantsUntilBrokerGoesDown for 3"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=3 SkolemDepth=1 Symmetry=20 Mode=batch
- * 1..10 steps. 618627 vars. 12735 primary vars. 1904160 clauses. 17009ms.
- * No counterexample found. Assertion may be valid. 316ms.
+ * 1..10 steps. 1031753 vars. 21815 primary vars. 3113952 clauses. 15829ms.
+ * No counterexample found. Assertion may be valid. 145ms.
  */
 assert BrokerRecoverPreservesStrictInvariantsUntilBrokerGoesDown {
   kafkaFaultTolerantBehavior[3] implies always (
@@ -207,7 +213,6 @@ assert BrokerRecoverPreservesStrictInvariantsUntilBrokerGoesDown {
 check BrokerRecoverPreservesStrictInvariantsUntilBrokerGoesDown for 3
 
 
-
 /**
  * If broker never goes down, Strict invariants satisfy for either of the two behaviors:
  * kafkaSimpleBehavior or kafkaFaultTolerantBehavior
@@ -215,8 +220,8 @@ check BrokerRecoverPreservesStrictInvariantsUntilBrokerGoesDown for 3
  * RESULT:
  * Executing "Check NeverBrokerCrashPreservesStrictInvariants for 2"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=2 SkolemDepth=1 Symmetry=20 Mode=batch
- * 1..10 steps. 222083 vars. 5630 primary vars. 659745 clauses. 6822ms.
- * No counterexample found. Assertion may be valid. 137ms.
+ * 1..10 steps. 1253836 vars. 27445 primary vars. 3773697 clauses. 6390ms.
+ * No counterexample found. Assertion may be valid. 204ms.
  */
 assert NeverBrokerCrashPreservesStrictInvariants {
   (kafkaSimpleBehavior[2] or kafkaFaultTolerantBehavior[2]) implies
@@ -232,8 +237,8 @@ check NeverBrokerCrashPreservesStrictInvariants for 2
  * RESULT: 
  * Executing "Check FaultTolerantKafkaEventuallyRecoversAfterCrash for 4"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=4 SkolemDepth=1 Symmetry=20 Mode=batch
- * 1..10 steps. 1159971 vars. 23360 primary vars. 3668369 clauses. 40658ms.
- * No counterexample found. Assertion may be valid. 395ms.
+ * 1..10 steps. 2413807 vars. 50805 primary vars. 7442066 clauses. 39830ms.
+ * No counterexample found. Assertion may be valid. 372ms.
  */
 assert FaultTolerantKafkaEventuallyRecoversAfterCrash {
   kafkaFaultTolerantBehavior[3] implies always (executeBrokerCrash implies (
@@ -258,8 +263,8 @@ check FaultTolerantKafkaEventuallyRecoversAfterCrash for 4
  *
  * Executing "Check EventCanOnlyBeReadAfterBeingPushed for 3"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=3 SkolemDepth=1 Symmetry=20 Mode=batch
- * 1..10 steps. 860571 vars. 13035 primary vars. 2636959 clauses. 100556ms.
- * No counterexample found. Assertion may be valid. 29185ms.
+ * 1..10 steps. 3274378 vars. 63840 primary vars. 10079025 clauses. 103479ms.
+ * No counterexample found. Assertion may be valid. 25209ms.
  */
 assert EventCanOnlyBeReadAfterBeingPushed {
   -- Any behaviour with an initially empty cluster (without any events)
@@ -282,8 +287,8 @@ check EventCanOnlyBeReadAfterBeingPushed for 3
  * 
  * Executing "Check SequentialityWithinPartition for 3"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=3 SkolemDepth=1 Symmetry=20 Mode=batch
- * 1..10 steps. 1207762 vars. 13470 primary vars. 3693935 clauses. 173393ms.
- * No counterexample found. Assertion may be valid. 32861ms.
+ * 1..10 steps. 1207762 vars. 13470 primary vars. 3693935 clauses. 172644ms.
+ * No counterexample found. Assertion may be valid. 22521ms.
  */
 assert SequentialityWithinPartition {
   -- Any behaviour with an initially empty cluster (without any events)
@@ -302,15 +307,14 @@ check SequentialityWithinPartition for 3
  * This asserts that an events in two different partitions can only be read in the order it was pushed in
  * This assertion is expected to result in a counterexample.
  *
- * RESULT
  * Executing "Check SequentialityBetweenTwoPartitions for 4"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=4 SkolemDepth=1 Symmetry=20 Mode=batch
- * 1..7 steps. 1206982 vars. 12726 primary vars. 3793893 clauses. 300636ms.
- * Counterexample found. Assertion is invalid. 78971ms.
+ * 1..7 steps. 1207073 vars. 12726 primary vars. 3794187 clauses. 110647ms.
+ * Counterexample found. Assertion is invalid. 12711ms.
  */
 assert SequentialityBetweenTwoPartitions {
   -- Any behaviour with an initially empty cluster (without any events)
-  ( (kafkaFaultTolerantBehavior[2] or kafkaSimpleBehavior[2]) and (no getAllEventsInCluster[Kafka]) ) implies (
+  ( (kafkaFaultTolerantBehavior[2] or kafkaSimpleBehavior[2]) and (no getAllEventsInCluster[Kafka]) ) and #Consumer=1 implies (
     all disj p1, p2: TopicPartition, disj e1, e2 : KafkaEvent | always (
       -- If e2 is read from p2 after e1 is read from p1
       (eventReadFromPartition[e2, p2] and once(eventReadFromPartition[e1, p1])) implies

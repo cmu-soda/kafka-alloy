@@ -85,6 +85,8 @@ pred consumerCanReadEventFromPartition[k: Kafka, c : Consumer, e: KafkaEvent, p 
   --------------------------
   -- The cluster should be aware of Consumer c
   c in k.consumer_groups.consumers
+  -- Consumer should be assigned to partition
+  p in c.assignedTo
 
   -- Partition p should belong to cluster
   p in k.zookeeper.topics.partitions
