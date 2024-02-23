@@ -32,10 +32,10 @@ open signatures
  * Events should not be exposed to servers outside the kafka cluster it belongs to
  */
 assert EventsOfOneClusterShouldNotBePresentInAnExternalBroker {
-	all k : Kafka | InvariantsStrict[k] implies (
-		all e : k.zookeeper.topics.partitions.(leader+followers).events.elems |
-			(events.e.Int).~replicasInBroker in k.zookeeper.brokers
-	)
+  all k : Kafka | InvariantsStrict[k] implies (
+    all e : k.zookeeper.topics.partitions.(leader+followers).events.elems |
+      (events.e.Int).~replicasInBroker in k.zookeeper.brokers
+  )
 }
 check EventsOfOneClusterShouldNotBePresentInAnExternalBroker for 5
 
@@ -44,7 +44,7 @@ check EventsOfOneClusterShouldNotBePresentInAnExternalBroker for 5
  * Each partition should always have exactly one leader replica
  */
 assert TopicPartitionMustHaveOneLeader {
-	all k: Kafka, p : k.zookeeper.topics.partitions | InvariantsStrict[k] implies one p.leader
+  all k: Kafka, p : k.zookeeper.topics.partitions | InvariantsStrict[k] implies one p.leader
 }
 check TopicPartitionMustHaveOneLeader for 5
 
@@ -53,8 +53,8 @@ check TopicPartitionMustHaveOneLeader for 5
  * in the cluster
  */
 assert NumPartitionsReplicasCannotExceedNumBrokers {
-	all k : Kafka, p: k.zookeeper.topics.partitions | 
-		InvariantsStrict[k] implies #getPartitionReplicas[p] <= #k.zookeeper.brokers
+  all k : Kafka, p: k.zookeeper.topics.partitions | 
+    InvariantsStrict[k] implies #getPartitionReplicas[p] <= #k.zookeeper.brokers
 }
 check NumPartitionsReplicasCannotExceedNumBrokers for 5
 
@@ -62,8 +62,8 @@ check NumPartitionsReplicasCannotExceedNumBrokers for 5
  * Events present in each topic of the cluster must be present in its Brokers
  */
 assert AllEventsInClusterShouldBePresentInBrokers {
-	all k : Kafka | InvariantsStrict[k] implies
-		getAllEventsInCluster[k] = k.zookeeper.brokers.replicasInBroker.events.elems
+  all k : Kafka | InvariantsStrict[k] implies
+    getAllEventsInCluster[k] = k.zookeeper.brokers.replicasInBroker.events.elems
 }
 check AllEventsInClusterShouldBePresentInBrokers for 5
 
@@ -73,7 +73,7 @@ check AllEventsInClusterShouldBePresentInBrokers for 5
  * of topics that the ConsumerGroup subscribes to
  */
 assert ParitionsOfSubscribedTopicsMustHaveOneOffset {
-	all cg:ConsumerGroup , p : cg.subscribedTo.partitions | one cg.offsets[p]
+  all cg:ConsumerGroup , p : cg.subscribedTo.partitions | one cg.offsets[p]
 }
 check ParitionsOfSubscribedTopicsMustHaveOneOffset for 5
 
@@ -82,7 +82,7 @@ check ParitionsOfSubscribedTopicsMustHaveOneOffset for 5
  * Consumers must be assigned to parititions of topics that its consumer group is subscribed to
  */
 assert ConsumerMustBeAssignedOnlyToPartitionsOfGroupSubscribedTopics {
-	all cg:ConsumerGroup | cg.consumers.assignedTo in cg.subscribedTo.partitions
+  all cg:ConsumerGroup | cg.consumers.assignedTo in cg.subscribedTo.partitions
 }
 check ConsumerMustBeAssignedOnlyToPartitionsOfGroupSubscribedTopics for 5
 
@@ -93,7 +93,7 @@ check ConsumerMustBeAssignedOnlyToPartitionsOfGroupSubscribedTopics for 5
  * consumers belonging to the group
  */
 assert ConsumerGroupShouldContainAssignmentData {
-	all cg : ConsumerGroup | dom[cg.assignments] = cg.consumers
+  all cg : ConsumerGroup | dom[cg.assignments] = cg.consumers
 }
 check ConsumerGroupShouldContainAssignmentData for 5
 
@@ -103,7 +103,7 @@ check ConsumerGroupShouldContainAssignmentData for 5
  * belonging to the group
  */
 assert EveryPartitionOfSubscribedTopicMustBeAssignedToAConsumer{
-	all cg:ConsumerGroup  | cg.subscribedTo.partitions in ran[cg.assignments]
+  all cg:ConsumerGroup  | cg.subscribedTo.partitions in ran[cg.assignments]
 }
 check EveryPartitionOfSubscribedTopicMustBeAssignedToAConsumer for 5
 
@@ -112,8 +112,8 @@ check EveryPartitionOfSubscribedTopicMustBeAssignedToAConsumer for 5
  * A partition cannot be shared between two consumers within a consumer group
  */
 assert PartitionAssignedToOneConsumerInGroup {
-	always (all cg:ConsumerGroup | all disj c1, c2 : cg.consumers | 
-		disj[c1.assignedTo, c2.assignedTo])
+  always (all cg:ConsumerGroup | all disj c1, c2 : cg.consumers | 
+    disj[c1.assignedTo, c2.assignedTo])
 }
 check PartitionAssignedToOneConsumerInGroup for 5
 
@@ -122,7 +122,7 @@ check PartitionAssignedToOneConsumerInGroup for 5
  * No Consumer in a ConsumerGroup should be unassigned to a Partition
  */
 assert NoConsumerIdle {
-	all cg:ConsumerGroup | all c : cg.consumers | 	some c.assignedTo
+  all cg:ConsumerGroup | all c : cg.consumers |   some c.assignedTo
 }
 check NoConsumerIdle for 5
 
@@ -133,8 +133,8 @@ check NoConsumerIdle for 5
  * another partition, and vice versa.
  */
 assert ReplicasMustBeUnshared {
-	all p : TopicPartition | 
-			disj[p.(leader + followers), (TopicPartition - p).(leader + followers)]
+  all p : TopicPartition | 
+      disj[p.(leader + followers), (TopicPartition - p).(leader + followers)]
 }
 check ReplicasMustBeUnshared for 5
 
@@ -143,8 +143,8 @@ check ReplicasMustBeUnshared for 5
  * Events of one partition cannot belong to another partition
  */
 assert EventsCannotBelongToTwoPartitions {
-	all k : Kafka, p : k.zookeeper.topics.partitions | 
-		disj[p.leader.events.elems, (TopicPartition - p).leader.events.elems]
+  all k : Kafka, p : k.zookeeper.topics.partitions | 
+    disj[p.leader.events.elems, (TopicPartition - p).leader.events.elems]
 }
 check EventsCannotBelongToTwoPartitions for 5
 
@@ -152,6 +152,6 @@ check EventsCannotBelongToTwoPartitions for 5
  * Consumers of ConsumerGroup of the cluster must not belong to any other consumer group
  */
 assert ClusterConsumerBelongsToClusterCG {
-	all k : Kafka, c : k.consumer_groups.consumers | c.~consumers in k.consumer_groups
+  all k : Kafka, c : k.consumer_groups.consumers | c.~consumers in k.consumer_groups
 }
 check ClusterConsumerBelongsToClusterCG for 5

@@ -11,7 +11,7 @@ open signatures
  * @return : Replicas of p
  */
 fun getPartitionReplicas[p : TopicPartition] : PartitionReplica {
-	{p.leader + p.followers}
+  {p.leader + p.followers}
 }
 
 /**
@@ -21,7 +21,7 @@ fun getPartitionReplicas[p : TopicPartition] : PartitionReplica {
  * @return : Set of KafkaEvent instances contained in the cluster
  */
 fun getAllEventsInCluster[k : Kafka] : KafkaEvent {
-	k.zookeeper.topics.partitions.leader.events.elems
+  k.zookeeper.topics.partitions.leader.events.elems
 }
 
 /**
@@ -31,7 +31,7 @@ fun getAllEventsInCluster[k : Kafka] : KafkaEvent {
  * @return : set of brokers that contain e
  */
 fun getBrokersContainingEvent[e : KafkaEvent] : Broker{
-	(events.e.Int).~replicasInBroker
+  (events.e.Int).~replicasInBroker
 }
 
 /**
@@ -41,5 +41,5 @@ fun getBrokersContainingEvent[e : KafkaEvent] : Broker{
  * @return : Set of partitions that require recovery
  */
 fun partitionsRequiringRecovery[k : Kafka] : TopicPartition {
-	{p : k.zookeeper.topics.partitions | #p.(leader + followers) < k.replicationFactor}
+  {p : k.zookeeper.topics.partitions | #p.(leader + followers) < k.replicationFactor}
 }

@@ -19,14 +19,12 @@ open invariants
  * NOTE: Counterexample in #6 is expected, please look at the comments above
  *       onceBrokerCrashPreservesInvariantsStrict to see why.
  */
-
-
 /*******************************
  * Valid Initial states of Kafka
  *******************************/
 pred Init[repFactor: Int] {
-	Kafka.replicationFactor = repFactor
-	InvariantsStrict[Kafka]
+  Kafka.replicationFactor = repFactor
+  InvariantsStrict[Kafka]
 }
 
 /**
@@ -34,8 +32,8 @@ pred Init[repFactor: Int] {
  * Instead InvariantsAfterCrash should satisfy before brokerRecover
  */
 pred InitBeforeRecover[repFactor: Int] {
-	Kafka.replicationFactor = repFactor
-	InvariantsAfterCrash[Kafka]
+  Kafka.replicationFactor = repFactor
+  InvariantsAfterCrash[Kafka]
 }
 
 
@@ -48,21 +46,21 @@ pred InitBeforeRecover[repFactor: Int] {
  * Used in readEventBehavior fact to assert that this behavior will preserve invariant
  */
 pred readEventBehavior[repFactor: Int] {
-	-- Initial state --
-	---------------
-	Init[repFactor]
+  -- Initial state --
+  ---------------
+  Init[repFactor]
 
-	-- Non-deterministic readEvent transition --
-	---------------------------------------
-	always (executeReadEvent or doNothing)
+  -- Non-deterministic readEvent transition --
+  ---------------------------------------
+  always (executeReadEvent or doNothing)
 }
 
 /**
  * This finds a simple instance to visually see the transition
  */
 run findSomeReadEventInstance {
-	Init[2] and some Kafka.zookeeper.topics.partitions.leader.events
-	executeReadEvent and after(doNothing)
+  Init[2] and some Kafka.zookeeper.topics.partitions.leader.events
+  executeReadEvent and after(doNothing)
 } for 6
 
 /**
@@ -70,8 +68,8 @@ run findSomeReadEventInstance {
  * the behavior of which is defined in readEventBehavior
  */
 assert readEventPreservesInvariants {
-	-- Set runMode to modify behavior
-	readEventBehavior[3] implies always(InvariantsStrict[Kafka])
+  -- Set runMode to modify behavior
+  readEventBehavior[3] implies always(InvariantsStrict[Kafka])
 }
 check readEventPreservesInvariants for 4
 
@@ -90,21 +88,21 @@ check readEventPreservesInvariants for 4
  * This will be used to verify if the transition pushEvent preserved invariants
  */
 pred pushEventBehavior[repFactor : Int] {
-	-- Initial state --
-	---------------
-	Init[repFactor]
+  -- Initial state --
+  ---------------
+  Init[repFactor]
 
-	-- Single pushEvent transition --
-	----------------------------
-	always(executePushEvent or doNothing)
+  -- Single pushEvent transition --
+  ----------------------------
+  always(executePushEvent or doNothing)
 }
 
 /**
  * This finds a simple instance to visually see the pushEvent transition
  */
 run findSomePushEventInstance {
-	Init[2] and some Kafka.zookeeper.topics.partitions.leader.events
-	executePushEvent and after(doNothing)
+  Init[2] and some Kafka.zookeeper.topics.partitions.leader.events
+  executePushEvent and after(doNothing)
 } for 4
 
 /**
@@ -112,11 +110,11 @@ run findSomePushEventInstance {
  * the behavior of which is defined in pushEventBehavior
  */
 assert pushEventPreservesInvariants {
-	-- Set runMode to modify behavior
-	pushEventBehavior[3] implies always(InvariantsStrict[Kafka])
+  -- Set runMode to modify behavior
+  pushEventBehavior[3] implies always(InvariantsStrict[Kafka])
 }
 check pushEventPreservesInvariants for 3
-	
+  
 
 
 
@@ -134,22 +132,22 @@ check pushEventPreservesInvariants for 3
  * occurs or nothing occurs for infinite steps
  */
 pred brokerCrashBehavior[repFactor: Int] {
-	-- Initial state --
-	---------------
-	Init[repFactor]
+  -- Initial state --
+  ---------------
+  Init[repFactor]
 
-	-- Transition --
-	--------------
-	-- Single step transition	
-	executeBrokerCrash
+  -- Transition --
+  --------------
+  -- Single step transition  
+  executeBrokerCrash
 }
 
 /**
  * This finds a simple instance to visually see the transition
  */
 run findSomeBrokerCrashInstance {
-	Init[3] and some Kafka.zookeeper.topics.partitions.leader.events
-	executeBrokerCrash and after(doNothing)
+  Init[3] and some Kafka.zookeeper.topics.partitions.leader.events
+  executeBrokerCrash and after(doNothing)
 } for 6
 
 /**
@@ -157,7 +155,7 @@ run findSomeBrokerCrashInstance {
  * Following a single brokerCrash
  */
 assert onceBrokerCrashPreservesInvariantsStrict {
-	brokerCrashBehavior[3] implies after(InvariantsStrict[Kafka])
+  brokerCrashBehavior[3] implies after(InvariantsStrict[Kafka])
 }
 check onceBrokerCrashPreservesInvariantsStrict for 3
 
@@ -166,8 +164,8 @@ check onceBrokerCrashPreservesInvariantsStrict for 3
  * Following a single brokerCrash
  */
 assert onceBrokerCrashPreservesInvariantsAfterCrash {
-	-- Set runMode to modify behavior
-	brokerCrashBehavior[3] implies after (InvariantsAfterCrash[Kafka])
+  -- Set runMode to modify behavior
+  brokerCrashBehavior[3] implies after (InvariantsAfterCrash[Kafka])
 }
 check onceBrokerCrashPreservesInvariantsAfterCrash for 4
 
@@ -176,8 +174,8 @@ check onceBrokerCrashPreservesInvariantsAfterCrash for 4
  * Following a single brokerCrash
  */
 assert onceBrokerCrashPreservesInvariantsAfterCrashForReplicationTwo {
-	-- Set runMode to modify behavior
-	brokerCrashBehavior[2] implies after (InvariantsAfterCrash[Kafka])
+  -- Set runMode to modify behavior
+  brokerCrashBehavior[2] implies after (InvariantsAfterCrash[Kafka])
 }
 check onceBrokerCrashPreservesInvariantsAfterCrashForReplicationTwo for 4
 
@@ -194,24 +192,24 @@ check onceBrokerCrashPreservesInvariantsAfterCrashForReplicationTwo for 4
  * occurs or nothing occurs for infinite steps
  */
 pred brokerRecoverBehavior[repFactor: Int] {
-	-- Initial state --
-	---------------
-	InitBeforeRecover[repFactor]
+  -- Initial state --
+  ---------------
+  InitBeforeRecover[repFactor]
 
-	-- Transition --
-	--------------
-	-- Single step transition
-	executeBrokerRecover
-	-- Later steps
-	always(executeBrokerRecover or doNothing)
+  -- Transition --
+  --------------
+  -- Single step transition
+  executeBrokerRecover
+  -- Later steps
+  always(executeBrokerRecover or doNothing)
 }
 
 /**
  * This finds a simple instance to visually see the transition
  */
 run findSomeBrokerRecoverInstance {
-	InitBeforeRecover[3] and some Kafka.zookeeper.topics.partitions.leader.events
-	executeBrokerRecover and after(doNothing)
+  InitBeforeRecover[3] and some Kafka.zookeeper.topics.partitions.leader.events
+  executeBrokerRecover and after(doNothing)
 } for 4
 
 /**
@@ -220,8 +218,8 @@ run findSomeBrokerRecoverInstance {
  * executeBrokerRecoverActionOnceAndThenDoWhatever
  */
 assert brokerRecoverPreservesInvariantsAfterRecover {
-	brokerRecoverBehavior[3] implies 
-		(InvariantsAfterCrash[Kafka] and after(always(InvariantsStrict[Kafka])))
+  brokerRecoverBehavior[3] implies 
+    (InvariantsAfterCrash[Kafka] and after(always(InvariantsStrict[Kafka])))
 }
 check brokerRecoverPreservesInvariantsAfterRecover for 4
 
