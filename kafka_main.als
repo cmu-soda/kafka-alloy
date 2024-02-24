@@ -206,8 +206,6 @@ assert BrokerRecoverPreservesStrictInvariantsUntilBrokerGoesDown {
 
     -- If a broker goes down, InvariantsAfterCrash satisfies until broker recovers
     and (executeBrokerCrash implies after(InvariantsAfterCrash[Kafka] until executeBrokerRecover))
-
-    
   )
 }
 check BrokerRecoverPreservesStrictInvariantsUntilBrokerGoesDown for 3
@@ -218,16 +216,16 @@ check BrokerRecoverPreservesStrictInvariantsUntilBrokerGoesDown for 3
  * kafkaSimpleBehavior or kafkaFaultTolerantBehavior
  *
  * RESULT:
- * Executing "Check NeverBrokerCrashPreservesStrictInvariants for 2"
- * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=2 SkolemDepth=1 Symmetry=20 Mode=batch
- * 1..10 steps. 1253836 vars. 27445 primary vars. 3773697 clauses. 6390ms.
- * No counterexample found. Assertion may be valid. 204ms.
+ * Executing "Check NeverBrokerCrashPreservesStrictInvariants for 3"
+ * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=3 SkolemDepth=1 Symmetry=20 Mode=batch
+ * 1..10 steps. 554253 vars. 12735 primary vars. 1685883 clauses. 139380ms.
+ * No counterexample found. Assertion may be valid. 7738ms.
  */
 assert NeverBrokerCrashPreservesStrictInvariants {
   (kafkaSimpleBehavior[2] or kafkaFaultTolerantBehavior[2]) implies
     ((not eventually(executeBrokerCrash)) implies always(InvariantsStrict[Kafka]))
 }
-check NeverBrokerCrashPreservesStrictInvariants for 2
+check NeverBrokerCrashPreservesStrictInvariants for 3
 
 
 /**
