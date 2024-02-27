@@ -180,9 +180,6 @@ pred canProducerPushEvent[k : Kafka, prod : Producer, e: KafkaEvent, p : TopicPa
   -- Partition p should belong to cluster
   p in k.zookeeper.topics.partitions
 
-  -- Partition p should be assigned to the Producer
-  -- p in prod.assignedTo
-
   -- Producer prod should be confugured in the cluster
   prod in k.producers
 
