@@ -194,21 +194,21 @@ check FaultTolerantKafkaWithTwoReplicasPreservesInvariantsAfterCrash for 4
  * Therefore this assertion holds.
  *
  * RESULT:
- * Executing "Check BrokerRecoverPreservesStrictInvariantsUntilBrokerGoesDown for 3"
+ * Executing "Check BrokerRecoverAfterCrashPreservesInvariantsStrict for 3"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=3 SkolemDepth=1 Symmetry=20 Mode=batch
  * 1..10 steps. 1031753 vars. 21815 primary vars. 3113952 clauses. 15829ms.
  * No counterexample found. Assertion may be valid. 145ms.
  */
-assert BrokerRecoverPreservesStrictInvariantsUntilBrokerGoesDown {
+assert BrokerRecoverAfterCrashPreservesInvariantsStrict {
   kafkaFaultTolerantBehavior[3] implies always (
+    -- After broker failure, InvariantsAfterCrash satisfies until broker recovers
+    (executeBrokerCrash implies after(InvariantsAfterCrash[Kafka] until executeBrokerRecover))
+    
     -- Strict invariants start to satisfy once a broker recovers
-    (executeBrokerRecover implies after(InvariantsStrict[Kafka]))
-
-    -- If a broker goes down, InvariantsAfterCrash satisfies until broker recovers
-    and (executeBrokerCrash implies after(InvariantsAfterCrash[Kafka] until executeBrokerRecover))
+    and (executeBrokerRecover implies after(InvariantsStrict[Kafka]))
   )
 }
-check BrokerRecoverPreservesStrictInvariantsUntilBrokerGoesDown for 3
+check BrokerRecoverAfterCrashPreservesInvariantsStrict for 3
 
 
 /**
