@@ -122,7 +122,7 @@ check InvariantsStrictAlwaysSatisfiesWithSimpleKafka for 5
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=4 SkolemDepth=1 Symmetry=20 Mode=batch
  * 1..3 steps. 208675 vars. 4514 primary vars. 611418 clauses. 7919ms.
  * Counterexample found. Assertion is invalid. 1509ms.
-
+ *
  * Executing "Check InvariantsStrictAlwaysSatisfiesWithFaultTolerantKafka for 5"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=5 SkolemDepth=1 Symmetry=20 Mode=batch
  * 1..3 steps. 248112 vars. 4740 primary vars. 744755 clauses. 146943ms.
@@ -180,12 +180,12 @@ check SimpleKafkaPreservesInvariantsAfterCrash for 4
  * Solver=sat4j Steps=1..9 Bitwidth=4 MaxSeq=4 SkolemDepth=1 Symmetry=20 Mode=batch
  * 1..9 steps. 917281 vars. 19242 primary vars. 2825093 clauses. 3327452ms.
  * No counterexample found. Assertion may be valid. 186673ms.
-
+ *
  * Executing "Check FaultTolerantKafkaWithThreeReplicasPreservesInvariantsAfterCrash for 3"
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=3 SkolemDepth=1 Symmetry=20 Mode=batch
  * 1..10 steps. 553375 vars. 12735 primary vars. 1683485 clauses. 57519ms.
  * No counterexample found. Assertion may be valid. 18325ms.
-
+ *
  * Executing "Check FaultTolerantKafkaWithThreeReplicasPreservesInvariantsAfterCrash for 4 but 6 steps"
  * Solver=sat4j Steps=1..6 Bitwidth=4 MaxSeq=4 SkolemDepth=1 Symmetry=20 Mode=batch
  * 1..6 steps. 442483 vars. 9354 primary vars. 1349532 clauses. 928091ms.
@@ -284,7 +284,7 @@ check NeverBrokerCrashPreservesStrictInvariants for 4 but 6 steps
  * Solver=sat4j Steps=1..10 Bitwidth=4 MaxSeq=4 SkolemDepth=1 Symmetry=20 Mode=batch
  * 1..10 steps. 2413807 vars. 50805 primary vars. 7442066 clauses. 39830ms.
  * No counterexample found. Assertion may be valid. 372ms.
-
+ *
  * Executing "Check FaultTolerantKafkaEventuallyRecoversAfterCrash for 5 but 9 steps"
  * Solver=sat4j Steps=1..9 Bitwidth=4 MaxSeq=5 SkolemDepth=1 Symmetry=20 Mode=batch
  * 1..9 steps. 1714547 vars. 31203 primary vars. 5452569 clauses. 68395ms.
