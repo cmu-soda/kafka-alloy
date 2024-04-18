@@ -1,4 +1,4 @@
-open signatures
+open signatures as sg
 open functions
 open util/relation
 
